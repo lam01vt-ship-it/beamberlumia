@@ -1,0 +1,9 @@
+bin/
+obj/
+.vs/
+*.user
+appsettings.*.local.json
+src/Tosix.Api/appsettings.json
+
+# Uploaded files (run --import-live or admin upload locally)
+src/Tosix.Api/wwwroot/uploads/
