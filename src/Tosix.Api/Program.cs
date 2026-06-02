@@ -125,6 +125,7 @@ using (var scope = app.Services.CreateScope())
         ALTER TABLE "SiteSettings" ADD COLUMN IF NOT EXISTS "Trust2Text" text;
         ALTER TABLE "SiteSettings" ADD COLUMN IF NOT EXISTS "Trust3Title" text;
         ALTER TABLE "SiteSettings" ADD COLUMN IF NOT EXISTS "Trust3Text" text;
+        ALTER TABLE "SiteSettings" ADD COLUMN IF NOT EXISTS "PolicyContent" text;
         UPDATE "SiteSettings" SET "SiteTitle" = 'AmberLumia' WHERE "SiteTitle" IS NULL OR "SiteTitle" = '' OR "SiteTitle" ILIKE 'tosix decor';
         UPDATE "SiteSettings" SET "HeroEyebrow" = 'AmberLumia — Đèn & nội thất' WHERE "HeroEyebrow" IS NULL OR "HeroEyebrow" = '';
         UPDATE "SiteSettings" SET "LogoSubtitle" = 'ĐÈN & NỘI THẤT CAO CẤP' WHERE "LogoSubtitle" IS NULL OR "LogoSubtitle" = '';
@@ -149,6 +150,10 @@ using (var scope = app.Services.CreateScope())
         WHERE "IsInStock" = false AND "IsOrder" = false AND "IsUpdating" = false;
         ALTER TABLE "Products" ADD COLUMN IF NOT EXISTS "PriceMax" numeric(18,0) NOT NULL DEFAULT 0;
         ALTER TABLE "Products" ADD COLUMN IF NOT EXISTS "CreatedAt" timestamp with time zone NOT NULL DEFAULT now();
+        """);
+    await db.Database.ExecuteSqlInterpolatedAsync($"""
+        UPDATE "SiteSettings" SET "PolicyContent" = {DbInitializer.DefaultPolicyContent}
+        WHERE "PolicyContent" IS NULL OR "PolicyContent" = '';
         """);
     await DbInitializer.SeedAsync(db, env);
 }

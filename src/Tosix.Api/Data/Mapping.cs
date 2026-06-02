@@ -9,7 +9,8 @@ public static class Mapping
         new(s.Id, s.CompanyName, s.TaxCode, s.Address, s.Email, s.PhonePrimary, s.PhoneSecondary,
             s.FacebookUrl, s.ZaloUrl, s.ZaloQrImagePath, s.SiteTitle, s.SiteTagline,
             s.HeroEyebrow, s.LogoSubtitle,
-            s.Trust1Title, s.Trust1Text, s.Trust2Title, s.Trust2Text, s.Trust3Title, s.Trust3Text);
+            s.Trust1Title, s.Trust1Text, s.Trust2Title, s.Trust2Text, s.Trust3Title, s.Trust3Text,
+            s.PolicyContent);
 
     public static CategoryDto ToDto(this ProductCategory c, int productCount = 0) =>
         new(c.Id, c.Name, c.Slug, c.ImagePath, c.SortOrder, c.IsActive, productCount);

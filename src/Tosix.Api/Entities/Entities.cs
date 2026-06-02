@@ -117,4 +117,5 @@ public class SiteSetting
     public string? Trust2Text { get; set; }
     public string? Trust3Title { get; set; }
     public string? Trust3Text { get; set; }
+    public string? PolicyContent { get; set; }
 }

@@ -210,6 +210,7 @@ public sealed class AdminSettingsController(AppDbContext db) : ControllerBase
         settings.Trust2Text = body.Trust2Text?.Trim();
         settings.Trust3Title = body.Trust3Title?.Trim();
         settings.Trust3Text = body.Trust3Text?.Trim();
+        settings.PolicyContent = body.PolicyContent?.Trim();
         await db.SaveChangesAsync(cancellationToken);
         return Ok(settings.ToDto());
     }

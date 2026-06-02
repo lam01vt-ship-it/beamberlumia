@@ -43,7 +43,8 @@ public sealed record SiteSettingDto(
     string? Trust2Title,
     string? Trust2Text,
     string? Trust3Title,
-    string? Trust3Text);
+    string? Trust3Text,
+    string? PolicyContent);
 
 public sealed record SiteSettingUpdateDto(
     string CompanyName,
@@ -64,7 +65,8 @@ public sealed record SiteSettingUpdateDto(
     string? Trust2Title,
     string? Trust2Text,
     string? Trust3Title,
-    string? Trust3Text);
+    string? Trust3Text,
+    string? PolicyContent);
 
 public sealed record CategoryDto(
     Guid Id,

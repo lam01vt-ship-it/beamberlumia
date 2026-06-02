@@ -6,6 +6,33 @@ namespace Tosix.Api.Data;
 
 public static class DbInitializer
 {
+    public const string DefaultPolicyContent = """
+        ## Đổi sản phẩm
+        - Thời gian: Trong vòng 3 ngày kể từ ngày khách hàng nhận được sản phẩm.
+        - Áp dụng: Chỉ với sản phẩm khác có giá bằng hoặc cao hơn. Không hoàn tiền chênh lệch khi đổi sang sản phẩm có giá thấp hơn.
+        - Điều kiện: Sản phẩm còn nguyên vẹn bao bì, đầy đủ phụ kiện, chưa qua sử dụng. Khách hàng chịu chi phí vận chuyển.
+
+        ## Trả hàng
+        - Thời gian: Trong vòng 3 ngày kể từ ngày khách hàng nhận được sản phẩm.
+        - Áp dụng: Hoàn tiền 100%, cửa hàng chịu chi phí vận chuyển.
+        - Điều kiện: Sản phẩm có lỗi từ nhà sản xuất.
+
+        ## Số lần đổi hàng
+        - Áp dụng 1 lần duy nhất cho mỗi đơn hàng.
+
+        ## Bảo hành
+        - Đèn trang trí: 1 năm.
+        - Quạt: Động cơ 2 năm, điều khiển 1 năm.
+
+        ## Nơi nhận bảo hành
+        - Đèn: Gửi phụ kiện hoặc sản phẩm mới thay thế.
+        - Quạt: Gửi đến trung tâm bảo hành.
+
+        ## Lưu ý quan trọng
+        - Bóng đèn tặng kèm không áp dụng chế độ bảo hành.
+        - Khách hàng vui lòng quay video khi mở hàng và phản hồi lỗi (nếu có) trong vòng 24 giờ. Sau 24 giờ, cửa hàng không chịu trách nhiệm về các lỗi phát sinh.
+        """;
+
     public static async Task SeedAsync(AppDbContext db, IWebHostEnvironment env, CancellationToken cancellationToken = default)
     {
         if (!await db.Roles.AnyAsync(cancellationToken))
@@ -64,6 +91,7 @@ public static class DbInitializer
             Trust2Text = "Hỗ trợ chọn sản phẩm phù hợp",
             Trust3Title = "Khách hàng tin tưởng",
             Trust3Text = "Feedback & đánh giá thực tế",
+            PolicyContent = DefaultPolicyContent,
         });
 
         var categories = new[]
