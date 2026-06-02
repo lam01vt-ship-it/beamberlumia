@@ -71,6 +71,7 @@ public sealed class PublicController(AppDbContext db) : ControllerBase
     public async Task<ActionResult<PagedResultDto<ProductDto>>> ProductsByCategory(
         string slug,
         [FromQuery] string? q,
+        [FromQuery] string? sort,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 24,
         CancellationToken cancellationToken = default)
@@ -90,7 +91,7 @@ public sealed class PublicController(AppDbContext db) : ControllerBase
 
         var totalCount = await query.CountAsync(cancellationToken);
         var items = await query
-            .OrderBy(p => p.SortOrder)
+            .ApplySort(sort)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Select(p => p.ToDto())
@@ -102,6 +103,7 @@ public sealed class PublicController(AppDbContext db) : ControllerBase
     [HttpGet("products")]
     public async Task<ActionResult<PagedResultDto<ProductDto>>> AllProducts(
         [FromQuery] string? q,
+        [FromQuery] string? sort,
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 24,
         CancellationToken cancellationToken = default)
@@ -116,7 +118,7 @@ public sealed class PublicController(AppDbContext db) : ControllerBase
 
         var totalCount = await query.CountAsync(cancellationToken);
         var items = await query
-            .OrderBy(p => p.SortOrder)
+            .ApplySort(sort)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Select(p => p.ToDto())

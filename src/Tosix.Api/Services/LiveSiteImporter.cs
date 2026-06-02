@@ -140,6 +140,7 @@ public sealed partial class LiveSiteImporter(
                 Price = price,
                 IsNew = wc.Categories.Any(c => c.Slug.Equals("new-arrival", StringComparison.OrdinalIgnoreCase)),
                 SortOrder = order++,
+                CreatedAt = DateTime.UtcNow,
                 IsActive = true,
             };
 

@@ -94,6 +94,8 @@ public sealed class AdminProductsController(AppDbContext db, ILocalFileStorage s
 
                 p.Price,
 
+                p.PriceMax,
+
                 p.ImagePath,
 
                 p.IsNew,
@@ -167,6 +169,9 @@ public sealed class AdminProductsController(AppDbContext db, ILocalFileStorage s
         var stockError = ValidateStockFlags(body.IsInStock, body.IsOrder, body.IsUpdating);
         if (stockError is not null) return BadRequest(stockError);
 
+        var priceError = ValidatePriceRange(body.Price, body.PriceMax);
+        if (priceError is not null) return BadRequest(priceError);
+
 
 
         var paths = ProductImageHelper.NormalizePaths(body.ImagePaths);
@@ -178,12 +183,14 @@ public sealed class AdminProductsController(AppDbContext db, ILocalFileStorage s
             Code = body.Code.Trim(),
             Name = body.Name.Trim(),
             Price = body.Price,
+            PriceMax = body.PriceMax,
             IsNew = body.IsNew,
             IsFeatured = body.IsFeatured,
             IsInStock = body.IsInStock,
             IsOrder = body.IsOrder,
             IsUpdating = body.IsUpdating,
             SortOrder = body.SortOrder,
+            CreatedAt = DateTime.UtcNow,
             IsActive = body.IsActive
         };
 
@@ -220,6 +227,9 @@ public sealed class AdminProductsController(AppDbContext db, ILocalFileStorage s
         var stockError = ValidateStockFlags(body.IsInStock, body.IsOrder, body.IsUpdating);
         if (stockError is not null) return BadRequest(stockError);
 
+        var priceError = ValidatePriceRange(body.Price, body.PriceMax);
+        if (priceError is not null) return BadRequest(priceError);
+
 
 
         var paths = ProductImageHelper.NormalizePaths(body.ImagePaths);
@@ -239,6 +249,8 @@ public sealed class AdminProductsController(AppDbContext db, ILocalFileStorage s
         entity.Name = body.Name.Trim();
 
         entity.Price = body.Price;
+
+        entity.PriceMax = body.PriceMax;
 
         entity.IsNew = body.IsNew;
 
@@ -299,6 +311,15 @@ public sealed class AdminProductsController(AppDbContext db, ILocalFileStorage s
             return "Vui lòng chọn loại hàng.";
         if (selectedCount > 1)
             return "Sản phẩm chỉ được chọn một loại: Hàng có sẵn, Hàng order hoặc Đang cập nhật.";
+        return null;
+    }
+
+    private static string? ValidatePriceRange(decimal price, decimal priceMax)
+    {
+        if (price < 0 || priceMax < 0)
+            return "Giá không được âm.";
+        if (priceMax > 0 && priceMax < price)
+            return "Giá đến phải lớn hơn hoặc bằng giá từ.";
         return null;
     }
 

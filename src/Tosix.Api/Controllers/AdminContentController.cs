@@ -199,6 +199,7 @@ public sealed class AdminSettingsController(AppDbContext db) : ControllerBase
         settings.PhoneSecondary = body.PhoneSecondary?.Trim();
         settings.FacebookUrl = body.FacebookUrl?.Trim();
         settings.ZaloUrl = body.ZaloUrl?.Trim();
+        settings.ZaloQrImagePath = body.ZaloQrImagePath?.Trim();
         settings.SiteTitle = body.SiteTitle?.Trim();
         settings.SiteTagline = body.SiteTagline?.Trim();
         settings.HeroEyebrow = body.HeroEyebrow?.Trim();

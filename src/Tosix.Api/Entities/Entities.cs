@@ -46,6 +46,7 @@ public class Product
     public string Code { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public decimal Price { get; set; }
+    public decimal PriceMax { get; set; }
     public string? ImagePath { get; set; }
     public bool IsNew { get; set; }
     public bool IsFeatured { get; set; }
@@ -53,6 +54,7 @@ public class Product
     public bool IsOrder { get; set; }
     public bool IsUpdating { get; set; }
     public int SortOrder { get; set; }
+    public DateTime CreatedAt { get; set; }
     public bool IsActive { get; set; } = true;
 
     public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
@@ -104,6 +106,7 @@ public class SiteSetting
     public string? PhoneSecondary { get; set; }
     public string? FacebookUrl { get; set; }
     public string? ZaloUrl { get; set; }
+    public string? ZaloQrImagePath { get; set; }
     public string? SiteTitle { get; set; }
     public string? SiteTagline { get; set; }
     public string? HeroEyebrow { get; set; }

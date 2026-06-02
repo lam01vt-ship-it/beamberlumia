@@ -95,6 +95,9 @@ public static class DbInitializer
             new() { Id = Guid.NewGuid(), CategoryId = categories[3].Id, Code = "TD001", Name = "TD001", Price = 350_000, ImagePath = Pick(23), IsNew = true, SortOrder = 14 },
             new() { Id = Guid.NewGuid(), CategoryId = categories[4].Id, Code = "TDX001", Name = "TDX001", Price = 370_000, ImagePath = Pick(24), IsNew = true, SortOrder = 15 },
         };
+        var seededAt = DateTime.UtcNow;
+        foreach (var product in products)
+            product.CreatedAt = seededAt;
         db.Products.AddRange(products);
 
         db.Banners.AddRange(

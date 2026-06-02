@@ -47,7 +47,7 @@ builder.Services.AddCors(o =>
 {
     o.AddPolicy("fe", p =>
     {
-        p.WithOrigins("http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5174", "http://127.0.0.1:5174")
+        p.SetIsOriginAllowed(_ => true)
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -116,6 +116,7 @@ using (var scope = app.Services.CreateScope())
         CREATE INDEX IF NOT EXISTS "IX_ProductImages_ProductId" ON "ProductImages" ("ProductId");
         ALTER TABLE "SiteSettings" ADD COLUMN IF NOT EXISTS "ZaloUrl" text;
         UPDATE "SiteSettings" SET "ZaloUrl" = 'https://zalo.me/84965975366' WHERE "ZaloUrl" IS NULL OR "ZaloUrl" = '';
+        ALTER TABLE "SiteSettings" ADD COLUMN IF NOT EXISTS "ZaloQrImagePath" text;
         ALTER TABLE "SiteSettings" ADD COLUMN IF NOT EXISTS "HeroEyebrow" text;
         ALTER TABLE "SiteSettings" ADD COLUMN IF NOT EXISTS "LogoSubtitle" text;
         ALTER TABLE "SiteSettings" ADD COLUMN IF NOT EXISTS "Trust1Title" text;
@@ -146,15 +147,16 @@ using (var scope = app.Services.CreateScope())
         UPDATE "Products" SET "IsInStock" = false, "IsOrder" = false WHERE "IsUpdating" = true;
         UPDATE "Products" SET "IsInStock" = true, "IsOrder" = false, "IsUpdating" = false
         WHERE "IsInStock" = false AND "IsOrder" = false AND "IsUpdating" = false;
+        ALTER TABLE "Products" ADD COLUMN IF NOT EXISTS "PriceMax" numeric(18,0) NOT NULL DEFAULT 0;
+        ALTER TABLE "Products" ADD COLUMN IF NOT EXISTS "CreatedAt" timestamp with time zone NOT NULL DEFAULT now();
         """);
     await DbInitializer.SeedAsync(db, env);
 }
 
-if (app.Environment.IsDevelopment())
-{
+
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+
 
 app.UseStaticFiles();
 app.UseCors("fe");

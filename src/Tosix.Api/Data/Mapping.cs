@@ -7,7 +7,7 @@ public static class Mapping
 {
     public static SiteSettingDto ToDto(this SiteSetting s) =>
         new(s.Id, s.CompanyName, s.TaxCode, s.Address, s.Email, s.PhonePrimary, s.PhoneSecondary,
-            s.FacebookUrl, s.ZaloUrl, s.SiteTitle, s.SiteTagline,
+            s.FacebookUrl, s.ZaloUrl, s.ZaloQrImagePath, s.SiteTitle, s.SiteTagline,
             s.HeroEyebrow, s.LogoSubtitle,
             s.Trust1Title, s.Trust1Text, s.Trust2Title, s.Trust2Text, s.Trust3Title, s.Trust3Text);
 
@@ -15,11 +15,11 @@ public static class Mapping
         new(c.Id, c.Name, c.Slug, c.ImagePath, c.SortOrder, c.IsActive, productCount);
 
     public static ProductDto ToDto(this Product p) =>
-        new(p.Id, p.CategoryId, p.Category.Name, p.Code, p.Name, p.Price, p.ImagePath,
+        new(p.Id, p.CategoryId, p.Category.Name, p.Code, p.Name, p.Price, p.PriceMax, p.ImagePath,
             p.IsNew, p.IsFeatured, p.IsInStock, p.IsOrder, p.IsUpdating, p.SortOrder, p.IsActive, p.Images.Count);
 
     public static ProductDto ToDto(this Product p, int imageCount) =>
-        new(p.Id, p.CategoryId, p.Category.Name, p.Code, p.Name, p.Price, p.ImagePath,
+        new(p.Id, p.CategoryId, p.Category.Name, p.Code, p.Name, p.Price, p.PriceMax, p.ImagePath,
             p.IsNew, p.IsFeatured, p.IsInStock, p.IsOrder, p.IsUpdating, p.SortOrder, p.IsActive, imageCount);
 
     public static AdminProductDetailDto ToAdminDetailDto(this Product p) =>

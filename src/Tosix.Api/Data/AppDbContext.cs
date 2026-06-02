@@ -48,6 +48,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             e.HasKey(x => x.Id);
             e.HasIndex(x => x.Code).IsUnique();
             e.Property(x => x.Price).HasPrecision(18, 0);
+            e.Property(x => x.PriceMax).HasPrecision(18, 0);
             e.HasOne(x => x.Category).WithMany(c => c.Products).HasForeignKey(x => x.CategoryId);
         });
 
