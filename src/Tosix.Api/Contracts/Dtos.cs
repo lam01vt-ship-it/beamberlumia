@@ -165,3 +165,6 @@ public sealed record PagedResultDto<T>(
     int TotalPages);
 
 public sealed record UploadResponse(string Path, string Url);
+
+public sealed record BulkActionRequest(IReadOnlyList<Guid> Ids);
+

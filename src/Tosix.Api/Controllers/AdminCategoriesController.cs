@@ -73,4 +73,40 @@ public sealed class AdminCategoriesController(AppDbContext db, ILocalFileStorage
         await db.SaveChangesAsync(cancellationToken);
         return NoContent();
     }
+
+    [HttpPost("bulk-delete")]
+    public async Task<IActionResult> BulkDelete([FromBody] BulkActionRequest body, CancellationToken cancellationToken)
+    {
+        var entities = await db.ProductCategories
+            .Where(x => body.Ids.Contains(x.Id))
+            .ToListAsync(cancellationToken);
+
+        var hasProducts = await db.Products.AnyAsync(p => body.Ids.Contains(p.CategoryId), cancellationToken);
+        if (hasProducts)
+            return BadRequest("Không thể xóa nhóm đang có sản phẩm.");
+
+        foreach (var entity in entities)
+        {
+            storage.DeleteIfExists(entity.ImagePath);
+            db.ProductCategories.Remove(entity);
+        }
+        await db.SaveChangesAsync(cancellationToken);
+        return NoContent();
+    }
+
+    [HttpPost("bulk-hide")]
+    public async Task<IActionResult> BulkHide([FromBody] BulkActionRequest body, CancellationToken cancellationToken)
+    {
+        var entities = await db.ProductCategories
+            .Where(x => body.Ids.Contains(x.Id))
+            .ToListAsync(cancellationToken);
+
+        foreach (var entity in entities)
+        {
+            entity.IsActive = false;
+        }
+        await db.SaveChangesAsync(cancellationToken);
+        return NoContent();
+    }
 }
+

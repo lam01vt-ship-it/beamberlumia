@@ -304,6 +304,39 @@ public sealed class AdminProductsController(AppDbContext db, ILocalFileStorage s
 
     }
 
+    [HttpPost("bulk-delete")]
+    public async Task<IActionResult> BulkDelete([FromBody] BulkActionRequest body, CancellationToken cancellationToken)
+    {
+        var entities = await db.Products
+            .Include(p => p.Images)
+            .Where(x => body.Ids.Contains(x.Id))
+            .ToListAsync(cancellationToken);
+
+        foreach (var entity in entities)
+        {
+            foreach (var path in ProductImageHelper.GetGalleryPaths(entity))
+                storage.DeleteIfExists(path);
+            db.Products.Remove(entity);
+        }
+        await db.SaveChangesAsync(cancellationToken);
+        return NoContent();
+    }
+
+    [HttpPost("bulk-hide")]
+    public async Task<IActionResult> BulkHide([FromBody] BulkActionRequest body, CancellationToken cancellationToken)
+    {
+        var entities = await db.Products
+            .Where(x => body.Ids.Contains(x.Id))
+            .ToListAsync(cancellationToken);
+
+        foreach (var entity in entities)
+        {
+            entity.IsActive = false;
+        }
+        await db.SaveChangesAsync(cancellationToken);
+        return NoContent();
+    }
+
     private static string? ValidateStockFlags(bool isInStock, bool isOrder, bool isUpdating)
     {
         var selectedCount = (isInStock ? 1 : 0) + (isOrder ? 1 : 0) + (isUpdating ? 1 : 0);
